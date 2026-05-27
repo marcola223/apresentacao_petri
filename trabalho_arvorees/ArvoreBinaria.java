@@ -126,21 +126,36 @@ public class ArvoreBinaria {
     }
 
     private void desenharFilhos(No no, String prefixo) {
+        // Mapeia se o nó atual possui filhos na esquerda ou direita
         boolean temEsq = no.getEsquerda() != null;
         boolean temDir = no.getDireita() != null;
 
+        // Parada da recursão: se for nó folha, encerra a função
         if (!temEsq && !temDir) return;
 
         if (temEsq) {
+            // Escolhe o conector: "├──" se tiver irmão à direita, ou "└──" se for filho único
             String conector = temDir ? "├── (E) " : "└── (E) ";
+
+            // Imprime a linha atual no console
             System.out.println(prefixo + conector + no.getEsquerda().getConteudo());
+
+            // Atualiza o recuo: mantém a linha vertical "│" se ainda houver irmão à direita, ou apenas espaço se for o último filho
             String novoPrefixo = prefixo + (temDir ? "│   " : "    ");
+
+            // Avança recursivamente para o próximo nível da esquerda
             desenharFilhos(no.getEsquerda(), novoPrefixo);
         }
 
         if (temDir) {
-            System.out.println(prefixo + "└── (D) " + no.getDireita().getConteudo());
-            desenharFilhos(no.getDireita(), prefixo + "    ");
+            // Escolhe o conector: "├──" se tiver irmão à esquerda, ou "└──" se for filho único
+            String conector = temEsq ? "├── (D) " : "└── (D) ";
+
+            // Como a direita sempre fecha o bloco, usa obrigatoriamente o conector final "└──"
+            System.out.println(prefixo + conector + no.getDireita().getConteudo());
+
+            //  Avança recursivamente para a direita limpando o recuo vertical anterior
+            desenharFilhos(no.getDireita(), prefixo + (temEsq ? "│   " : "    "));
         }
     }
 
